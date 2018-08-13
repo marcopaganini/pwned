@@ -33,11 +33,8 @@ func (x *Server) viewHandler(w http.ResponseWriter, r *http.Request) {
 	pass := r.PostFormValue("pass")
 	hash := fmt.Sprintf("%X", sha1.Sum([]byte(pass)))
 
-	log.Printf("pass=[%s] sha1=[%s]\n", pass, hash)
-
 	rows, err := x.db.Query("SELECT count FROM pwned where hash = \"" + hash + "\"")
 	if err != nil {
-		log.Println("Got error:", err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -45,16 +42,11 @@ func (x *Server) viewHandler(w http.ResponseWriter, r *http.Request) {
 
 	count := 0
 	if rows.Next() {
-		log.Println("Fetching row")
 		err = rows.Scan(&count)
-		log.Println("Count=", count)
-		log.Println("Error=", err)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-	} else {
-		log.Println("Didn't find anything...")
 	}
 
 	fmt.Fprintf(w, "{ \"count\":%d }\n", count)
