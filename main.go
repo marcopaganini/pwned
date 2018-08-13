@@ -15,6 +15,11 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+const (
+	// The base path for this service.
+	basePath = "/pwned"
+)
+
 var templates = template.Must(template.ParseFiles("root.html"))
 
 // Server holds database and other information about this server.
@@ -63,7 +68,7 @@ func main() {
 	}
 	defer srv.db.Close()
 
-	http.HandleFunc("/", srv.rootHandler)
-	http.HandleFunc("/view/", srv.viewHandler)
+	http.HandleFunc(basePath+"/", srv.rootHandler)
+	http.HandleFunc(basePath+"/view/", srv.viewHandler)
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
