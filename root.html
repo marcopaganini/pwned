@@ -10,31 +10,34 @@
 </head>
 <body>
   <div class="container">
-    <div class="page-header">
-      <h1>Compromised password Checker</h1>
-    </div>
-    <p>
-    Enter the password to be checked or a sha1 hash of your password (note:
-    direct sha1 input not working yet). No logs are kept of these queries and
-    the passwords are not saved anywhere. Keep in mind that a "no hacked"
-    result only means that the password cannot be found in the existing
-    database. There is no guarantee that it has not been leaked in a yet to be
-    disclosed hack.
-    <p>
-
-    <form>
-      <div class="form-group">
-        <label for="pass">Password (or Hash):</label>
-        <input type="password" class="form-control" id="pass">
+    <div class="col-md-10 col-lg-10">
+      <div class="pb-2 mt-4 mb-2 border-bottom">
+        <h1>Compromised password Checker</h1>
       </div>
-      <button type="submit" class="btn btn-default" onclick="checkPwned(); return false">Check</button>
-      <!-- note: return false after the function call above is needed to avoid a refresh -->
-    </form>
-    <p>
 
-    <!-- results -->
-    <div class="alert alert-success" id="results_ok" style="display:none;"></div>
-    <div class="alert alert-danger" id="results_bad" style="display:none;"></div>
+      <p>
+      Enter the password to be checked or a sha1 hash of your password (note:
+      direct sha1 input not working yet). No logs are kept of these queries and
+      the passwords are not saved anywhere. Keep in mind that a "no hacked"
+      result only means that the password cannot be found in the existing
+      database. There is no guarantee that it has not been leaked in a yet to be
+      disclosed hack.
+      <p>
+
+      <form>
+        <div class="form-group">
+          <label for="pass">Password (or Hash):</label>
+          <input type="password" class="form-control" id="pass">
+        </div>
+        <button type="submit" class="btn btn-default" onclick="checkPwned(); return false">Check</button>
+        <!-- note: return false after the function call above is needed to avoid a refresh -->
+      </form>
+      <p>
+
+      <!-- results -->
+      <div class="alert alert-success" id="results_ok" style="display:none;"></div>
+      <div class="alert alert-danger" id="results_bad" style="display:none;"></div>
+    </div>
   </div>
 
   <script>
