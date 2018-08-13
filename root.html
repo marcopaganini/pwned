@@ -1,39 +1,51 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Compromised password checker</title>
-  </head>
-  <body>
-    <h1>Enter your password</h1>
+<head>
+  <title>Compromised password checker</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link href='https://fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
+  <link href='custom.css' rel='stylesheet' type='text/css'>
+</head>
+<body>
+  <div class="container">
+    <h1>Compromised password Checker</h1>
     <p>
     Enter the password to be checked or a sha1 hash of your password. No logs are kept
     of these queries and the passwords entered are not saved anywhere.
     <p>
+
     <form>
-      <div>Password or Hash: <input type="text" id="pass"></div>
-      <div><input type="submit" value="Check" onclick="checkPwned(); return false"></div>
+      <div class="form-group">
+        <div class="col-xs-2">
+          <label for="pass">Password (or Hash):</label>
+          <input type="password" class="form-control" id="pass">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-default" onclick="checkPwned(); return false">Check</button>
       <!-- note: return false after the function call above is needed to avoid a refresh -->
     </form>
 
     <p>Results:</p>
     <div id="results"></div>
+  </div>
 
-    <script>
-      function checkPwned() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "/view/", true);
+  <script>
+    function checkPwned() {
+      var xhttp = new XMLHttpRequest();
+      xhttp.open("POST", "/view/", true);
 
-        xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            var res = JSON.parse(this.responseText);
-            document.getElementById("results").innerHTML = res.count + " hashes found";
-          }
-        };
-        pass = document.getElementById("pass").value;
-        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhttp.send("pass=" + pass);
-      }
-    </script>
-  </body>
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          var res = JSON.parse(this.responseText);
+          document.getElementById("results").innerHTML = res.count + " hashes found";
+        }
+      };
+      pass = document.getElementById("pass").value;
+      xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhttp.send("pass=" + pass);
+    }
+  </script>
+</body>
 </html>
