@@ -11,6 +11,8 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"regexp"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -20,7 +22,12 @@ const (
 	basePath = "/pwned"
 )
 
-var templates = template.Must(template.ParseFiles("root.html"))
+var (
+	templates = template.Must(template.ParseFiles("root.html"))
+
+	// SHA1 matching regexp
+	sha1Regex = regexp.MustCompile(`(?i)[\da-f]{40}`)
+)
 
 // Server holds database and other information about this server.
 type Server struct {
@@ -35,8 +42,17 @@ func (x *Server) rootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (x *Server) viewHandler(w http.ResponseWriter, r *http.Request) {
+	var hash string
+
+	// Fetch password from POST request and calculate the uppercase
+	// (textual) version of the SHA1 hash. If the password looks like
+	// a hash (40 hexascii chars), use it directly.
 	pass := r.PostFormValue("pass")
-	hash := fmt.Sprintf("%X", sha1.Sum([]byte(pass)))
+	if sha1Regex.MatchString(pass) {
+		hash = strings.ToUpper(pass)
+	} else {
+		hash = fmt.Sprintf("%X", sha1.Sum([]byte(pass)))
+	}
 
 	rows, err := x.db.Query("SELECT count FROM pwned where hash = \"" + hash + "\"")
 	if err != nil {
