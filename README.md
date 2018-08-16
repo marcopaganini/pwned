@@ -34,35 +34,37 @@ are large files (~9GB compressed, ~22GB compressed) so make sure you have the re
 
 ## Converting the file to a SQLite3 database
 
-1. Make sure your system has sqlite3 installed (on Debian and Debian-based systems like Ubuntu and Mint, use `sudo apt-get install sqlite3`).
+    * Make sure your system has sqlite3 installed (on Debian and Debian-based systems like Ubuntu and Mint, use `sudo apt-get install sqlite3`).
 
-1. Unpack the passwords file.
+    * Unpack the passwords file.
 
-1. Create the sqlite3 database with:
+    * Create the sqlite3 database with:
 
-```
-$ sqlite3 pwned.db
+    ```
+    $ sqlite3 pwned.db
 
-create table pwned (
-  hash text primary key not null,
-  count int
-);
-```
+    create table pwned (
+      hash text primary key not null,
+      count int
+    );
+    ```
 
-1. Start the import process with:
+    * Start the import process with:
 
-```
-.mode csv
-.separator :
-.import name-of-the-uncompressed-password-file.txt pwned
-```
+    ```
+    .mode csv
+    .separator :
+    .import name-of-the-uncompressed-password-file.txt pwned
+    ```
 
-1. This will take a while. Go fetch coffee.
+    * This will take a while. Go fetch coffee. Keep an eye for error messages.
 
 ## Using the program
 
-1. Download and compile the frontend with `go get -v github.com/marcopaganini/pwned`. This will install the `pwned` binary under `$GOPATH/bin`.
+    * Download and compile the frontend with `go get -v github.com/marcopaganini/pwned`. This will install the `pwned` binary under `$GOPATH/bin`.
 
-1. Run the program with `$GOPATH/bin/pwned --dbfile=<path_to_your_database_file>`
+    * Run the program with `$GOPATH/bin/pwned --dbfile=<path_to_your_database_file>`
 
-1. If everything goes well, access the frontend at http://localhost:8080
+    * If everything goes well, access the frontend at http://localhost:8080
+
+Feel free to contact me or open an issue in case of trouble.
