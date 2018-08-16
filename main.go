@@ -25,13 +25,19 @@ var (
 	sha1Regex = regexp.MustCompile(`(?i)[\da-f]{40}`)
 )
 
+// Page holds values to be passed to the page templates.
+type Page struct {
+	RootPath string
+}
+
 // Server holds database and other information about this server.
 type Server struct {
-	db *sql.DB
+	db   *sql.DB
+	page Page
 }
 
 func (x *Server) rootHandler(w http.ResponseWriter, r *http.Request) {
-	err := rootTemplate.ExecuteTemplate(w, "root.html", "nodata")
+	err := rootTemplate.ExecuteTemplate(w, "root.html", x.page)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -78,7 +84,10 @@ func main() {
 
 	flag.Parse()
 
-	srv := &Server{}
+	// Create a new server object with the page parameters.
+	srv := &Server{
+		page: Page{RootPath: *rootpath},
+	}
 
 	srv.db, err = sql.Open("sqlite3", *dbfile)
 	if err != nil {

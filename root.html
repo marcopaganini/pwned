@@ -42,7 +42,7 @@
   <script>
     function checkPwned() {
       var xhttp = new XMLHttpRequest();
-      xhttp.open("POST", "/pwned/view/", true);
+      xhttp.open("POST", "{{.RootPath}}/view/", true);
 
       xhttp.onreadystatechange = function() {
         if (this.readyState == 4) {
