@@ -34,11 +34,11 @@ are large files (~9GB compressed, ~22GB compressed) so make sure you have the re
 
 ## Converting the file to a SQLite3 database
 
-    * Make sure your system has sqlite3 installed (on Debian and Debian-based systems like Ubuntu and Mint, use `sudo apt-get install sqlite3`).
+1. Make sure your system has sqlite3 installed (on Debian and Debian-based systems like Ubuntu and Mint, use `sudo apt-get install sqlite3`).
 
-    * Unpack the passwords file.
+1. Unpack the passwords file.
 
-    * Create the sqlite3 database with:
+1. Create the sqlite3 database with:
 
     ```
     $ sqlite3 pwned.db
@@ -49,7 +49,7 @@ are large files (~9GB compressed, ~22GB compressed) so make sure you have the re
     );
     ```
 
-    * Start the import process with:
+1. Start the import process with:
 
     ```
     .mode csv
@@ -57,14 +57,14 @@ are large files (~9GB compressed, ~22GB compressed) so make sure you have the re
     .import name-of-the-uncompressed-password-file.txt pwned
     ```
 
-    * This will take a while. Go fetch coffee. Keep an eye for error messages.
+1. This will take a while. Go fetch coffee. Keep an eye for error messages.
 
 ## Using the program
 
-    * Download and compile the frontend with `go get -v github.com/marcopaganini/pwned`. This will install the `pwned` binary under `$GOPATH/bin`.
+1. Download and compile the frontend with `go get -v github.com/marcopaganini/pwned`. This will install the `pwned` binary under `$GOPATH/bin`.
 
-    * Run the program with `$GOPATH/bin/pwned --dbfile=<path_to_your_database_file>`
+1. Run the program with `$GOPATH/bin/pwned --dbfile=<path_to_your_database_file>`
 
-    * If everything goes well, access the frontend at http://localhost:8080
+1. If everything goes well, access the frontend at http://localhost:8080
 
-Feel free to contact me or open an issue in case of trouble.
+1. You can type your password directly, or a SHA1 hash. The frontend uses anything that looks like a SHA1 hash directly. This is useful for those who prefer to enter a SHA1 hash (instead of the password).
