@@ -2,7 +2,7 @@
 
 ## Leaked password checker (in Go)
 
-This is a simple web-frontend for a leaked password checker in Go. It expects a leaked database in SQLite3 format, with two columns per row: The first one containing the SHA1 of the leaked password and the second the number of times the password was seen in the wild. This was directly inspired by the great work of Troy Hunt and his site, http://haveibeenpwned.com, but for those who have concerns about freely typing their passwords on a site they don't control.
+This is a simple web-frontend for a leaked password checker in Go. It expects a leaked database in SQLite3 format, with two columns per row: The first one containing the SHA1 of the leaked password, and the second the number of times the password was seen in the wild. This project was directly inspired by the great work of Troy Hunt and his site, http://haveibeenpwned.com, but targets those who have concerns about freely typing their passwords on a site they don't control.
 
 ## Leaked password file format
 
@@ -34,6 +34,8 @@ are large files (~9GB compressed, ~22GB compressed) so make sure you have the re
 
 ## Converting the file to a SQLite3 database
 
+1. Make sure you have even more disk space. A 22GB text file becomes a 57GB database. You have been warned.
+
 1. Make sure your system has sqlite3 installed (on Debian and Debian-based systems like Ubuntu and Mint, use `sudo apt-get install sqlite3`).
 
 1. Unpack the passwords file.
@@ -63,7 +65,7 @@ are large files (~9GB compressed, ~22GB compressed) so make sure you have the re
 
 1. Download and compile the frontend with `go get -v github.com/marcopaganini/pwned`. This will install the `pwned` binary under `$GOPATH/bin`.
 
-1. Run the program with `$GOPATH/bin/pwned --dbfile=<path_to_your_database_file>`
+1. Run the program with `$GOPATH/bin/pwned --dbfile=<path_to_your_database_file> &`
 
 1. If everything goes well, access the frontend at http://localhost:8080
 
