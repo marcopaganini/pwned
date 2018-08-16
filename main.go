@@ -7,6 +7,7 @@ package main
 import (
 	"crypto/sha1"
 	"database/sql"
+	"flag"
 	"fmt"
 	"html/template"
 	"log"
@@ -17,13 +18,8 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-const (
-	// The base path for this service.
-	basePath = "/pwned"
-)
-
 var (
-	templates = template.Must(template.ParseFiles("root.html"))
+	rootTemplate = template.Must(template.ParseFiles("root.html"))
 
 	// SHA1 matching regexp
 	sha1Regex = regexp.MustCompile(`(?i)[\da-f]{40}`)
@@ -35,7 +31,7 @@ type Server struct {
 }
 
 func (x *Server) rootHandler(w http.ResponseWriter, r *http.Request) {
-	err := templates.ExecuteTemplate(w, "root.html", "nodata")
+	err := rootTemplate.ExecuteTemplate(w, "root.html", "nodata")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
@@ -76,15 +72,21 @@ func (x *Server) viewHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	var err error
 
+	dbfile := flag.String("dbfile", "", "SQLite3 Database file.")
+	rootpath := flag.String("rootpath", "", "Root path in the URL (usually empty).")
+	port := flag.Int("port", 8080, "HTTP server port.")
+
+	flag.Parse()
+
 	srv := &Server{}
 
-	srv.db, err = sql.Open("sqlite3", "/data/tmp/pwned/pwned.db")
+	srv.db, err = sql.Open("sqlite3", *dbfile)
 	if err != nil {
 		log.Fatalln(err)
 	}
 	defer srv.db.Close()
 
-	http.HandleFunc(basePath+"/", srv.rootHandler)
-	http.HandleFunc(basePath+"/view/", srv.viewHandler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	http.HandleFunc(*rootpath+"/", srv.rootHandler)
+	http.HandleFunc(*rootpath+"/view/", srv.viewHandler)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", *port), nil))
 }
