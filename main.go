@@ -56,20 +56,15 @@ func (x *Server) viewHandler(w http.ResponseWriter, r *http.Request) {
 		hash = fmt.Sprintf("%X", sha1.Sum([]byte(pass)))
 	}
 
-	rows, err := x.db.Query("SELECT count FROM pwned where hash = \"" + hash + "\"")
-	if err != nil {
+	count := 0
+	err := x.db.QueryRow("SELECT count FROM pwned where hash = ?", hash).Scan(&count)
+	switch {
+	case err == sql.ErrNoRows:
+	case err != nil:
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	}
-	defer rows.Close()
-
-	count := 0
-	if rows.Next() {
-		err = rows.Scan(&count)
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	default:
+		count++
 	}
 
 	fmt.Fprintf(w, "{ \"count\":%d }\n", count)
